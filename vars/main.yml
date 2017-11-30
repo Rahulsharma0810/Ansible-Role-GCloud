@@ -1,29 +1,6 @@
-Ansible-Role-GCloud
-===================
+#####################################################
+#############GCloud Roles Variables##################
 
-Role to install Gcloud on Linux Instances
-
-
-The Issue ? 
------------
-Gcloud comes with outstanding deb package which could install on the go with yum or apt.
-
-But when we try to update anything
-
-```gcloud components update```
-
-```
-> Error: (gcloud.components.update) You cannot performe this action
-because this cloud SDK installation is managed by an external packages manager. 
-Please consider using a separate installation of the 
-cloud SDK created through the default mechanism 
-described at: https:cloud.google.com/sdk
-```
-After, By running this role you can install single components like kubectl, gsutil etc. 
-
-Role Variables
---------------
-```
 # Base URL From SDK Archive will be downloaded.
 gcloud_archive_url: "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads"
 # Example: google-cloud-sdk-114.0.0-darwin-x86_64.tar.gz. If present, the archive will be downloaded.
@@ -54,27 +31,4 @@ gcloud_debug: yes
 gcloud_set_as_default: yes
 gcloud_config_only: no
 
-```
-Default English US English is set.
-
-
-Example Playbook
-----------------
-
-    - hosts: YOUR-HOST-OR-GROUP
-      roles:
-    	- Ansible-Role-Gcloud
-
-License
--------
-
-MIT
-
-Author Information
-------------------
-
-###Rahul Sharma
-
-[Github](https://github.com/Rahulsharma0810)
-
-[Facebook](https://www.facebook.com/rahulsharma0810)
+########### Ending og Gcloud Role Variables ##########

@@ -1,0 +1,73 @@
+- block:
+  - name: Removing GCloud Default Outdated SDK
+    apt:
+      pkg: "{{ item }}"
+      state: absent
+    with_items:
+      - google-cloud-sdk
+      - python-crcmod
+
+  # Creating Temporary Directory to download achieve
+  - name: REMOVE ALREADY DOWNLOADED ARCHIVE
+    file:
+      path: "{{ gcloud_tmp_path }}"
+      state: absent
+
+  - name: INSURE TEMP PATH EXISTS
+    file:
+      path: "{{ gcloud_tmp_path }}"
+      state: directory
+
+  ## Downloading Archive
+  - name: DOWNLOAD THE ARCHIVE
+    get_url:
+      url: "{{ gcloud_archive_url }}/{{ gcloud_archive_name }}"
+      dest: "{{ gcloud_tmp_path }}/{{ gcloud_archive_name }}"
+      force: "{{ gcloud_force_download }}"
+
+  - name: REMOVE EXISTING GOOGLE-CLOUD-SDK DIR, IT IF EXISTS
+    file:
+        path: "{{ gcloud_install_path }}/google-cloud-sdk"
+        state: absent
+
+  - set_fact:
+      archive_path: "{{ gcloud_tmp_path + '/' +  gcloud_archive_name }}"
+
+  - name: INSURE TEMP PATH EXISTS
+    file:
+      path: "{{ gcloud_install_path }}"
+      state: directory
+
+  - name: UNARCHIVE
+    shell: cd "{{ gcloud_install_path }}" && tar xvzf "{{ archive_path }}"
+
+  - name: Create a new file
+    file: path=/etc/profile.d/Ansible-aliases.sh state=touch
+
+  - lineinfile:
+      path: /etc/profile.d/Ansible-aliases.sh
+      line: 'export PATH=/usr/bin/gcloud/google-cloud-sdk/bin:$PATH'
+
+  - name: REMOVE THE ARCHIVE
+    file:
+      path: "{{ archive_path }}"
+      state: absent
+
+  - name: REMOVE THE SCRIPT
+    file:
+      path: "{{ gcloud_tmp_path }}"
+      state: absent
+
+  - name: INSTALLS REQUIRED PYTHON PACKAGES
+    apt:
+      pkg: "{{ item }}"
+      state: present
+    with_items:
+      - python-pip
+      - python-setuptools
+      - python-openssl
+
+  - name: INSTALLS CRCMOD
+    pip:
+      name: crcmod
+  become: true

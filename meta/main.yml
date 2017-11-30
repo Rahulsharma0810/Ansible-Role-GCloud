@@ -1,0 +1,10 @@
+galaxy_info:
+  author: Rahul Sharma
+  description: Install Google Cloud SDK and its Components.
+  license: MIT
+  min_ansible_version: 2.0
+  platforms:
+  - name: Ubuntu
+    versions:
+    - all
+  dependencies: []
